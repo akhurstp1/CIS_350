@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.net.Uri;
 import android.content.Intent;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -23,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
     player_e player = player_e.singlePlayer;
     game_e game = game_e.goFish;
 
-    int pScore;
-    int cScore;
+    ArrayList<Player> players = new ArrayList<Player>();
+    Game g;
     int cardID;
     boolean ptoc;
 
@@ -83,21 +84,11 @@ public class MainActivity extends AppCompatActivity {
         l.setVisibility(View.VISIBLE);
     }
 
-    /**
-     *
-     * @param v
-     */
-
     public void gameMainMenuButtonPressed(View v) {
         LinearLayout l = findViewById(R.id.backPopup);
         l.setVisibility(View.INVISIBLE);
         setContentView(R.layout.activity_main);
     }
-
-    /**
-     *
-     * @param v
-     */
 
     public void gameNewGameButtonPressed(View v) {
         LinearLayout l = findViewById(R.id.backPopup);
@@ -105,11 +96,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.gofish);
         setupGoFish();
     }
-
-    /**
-     *
-     * @param v
-     */
 
     public void gameContinueButtonPressed(View v) {
         LinearLayout l = findViewById(R.id.backPopup);
@@ -177,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGoFish() {
+        /*
         Random r = new Random();
         int card, count = 0;
         int[] pHand = new int[5];
@@ -209,20 +196,41 @@ public class MainActivity extends AppCompatActivity {
 
             count++;
         }
+        */
+
+        Card c;
+        g = new Game("GOFISH");
+
+        players.add(new Player("User"));
+        players.add(new Player("Computer"));
+
+        for(Player p: players) {
+            for(int i = 0; i < 5; i++){
+                g.deal(p);
+            }
+
+            p.sortHand();
+        }
+
+        for(int i = 0; i < 5; i++) {
+            c = players.get(0).hand.get(i);
+            addCard(c.getCardInt(), true);
+
+            c = players.get(1).hand.get(i);
+            addCard(c.getCardInt(), false);
+        }
     }
 
     private void playCard() {
-        LinkedList<Integer> l = new LinkedList<>();
+        int x;
 
-        //l = game_type.playCard(cardID);
+        x = g.tickGoFish(players, cardID);
 
-        if(l.size() == 0) {
-            drawCardDeck(false);
+        if(x == 1) {
+
         } else {
-            for(int i = 0; i < l.size(); i++) {
-                cardID = l.pop();
-                drawCardPlayer(false);
-            }
+            cardID = g.deal(players.get(0)).getCardInt();
+            drawCardDeck(false);
         }
     }
 
@@ -337,8 +345,8 @@ public class MainActivity extends AppCompatActivity {
             cardID = v.getId();
             ptoc = true;
 
-            //playCard();
-            drawCardDeck(false);
+            playCard();
+            //drawCardDeck(false);
             //setCardBackground((ImageButton)findViewById(v.getId()), card);
         }
     };
@@ -348,49 +356,6 @@ public class MainActivity extends AppCompatActivity {
         int x = c % 13;
         switch(s) {
             case 0:
-                switch(x) {
-                    case 0:
-                        i.setBackgroundResource(R.drawable.c1);
-                        break;
-                    case 1:
-                        i.setBackgroundResource(R.drawable.c2);
-                        break;
-                    case 2:
-                        i.setBackgroundResource(R.drawable.c3);
-                        break;
-                    case 3:
-                        i.setBackgroundResource(R.drawable.c4);
-                        break;
-                    case 4:
-                        i.setBackgroundResource(R.drawable.c5);
-                        break;
-                    case 5:
-                        i.setBackgroundResource(R.drawable.c6);
-                        break;
-                    case 6:
-                        i.setBackgroundResource(R.drawable.c7);
-                        break;
-                    case 7:
-                        i.setBackgroundResource(R.drawable.c8);
-                        break;
-                    case 8:
-                        i.setBackgroundResource(R.drawable.c9);
-                        break;
-                    case 9:
-                        i.setBackgroundResource(R.drawable.c10);
-                        break;
-                    case 10:
-                        i.setBackgroundResource(R.drawable.c11);
-                        break;
-                    case 11:
-                        i.setBackgroundResource(R.drawable.c12);
-                        break;
-                    case 12:
-                        i.setBackgroundResource(R.drawable.c13);
-                        break;
-                }
-                break;
-            case 1:
                 switch(x) {
                     case 0:
                         i.setBackgroundResource(R.drawable.h1);
@@ -433,50 +398,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 break;
-            case 2:
-                switch(x) {
-                    case 0:
-                        i.setBackgroundResource(R.drawable.s1);
-                        break;
-                    case 1:
-                        i.setBackgroundResource(R.drawable.s2);
-                        break;
-                    case 2:
-                        i.setBackgroundResource(R.drawable.s3);
-                        break;
-                    case 3:
-                        i.setBackgroundResource(R.drawable.s4);
-                        break;
-                    case 4:
-                        i.setBackgroundResource(R.drawable.s5);
-                        break;
-                    case 5:
-                        i.setBackgroundResource(R.drawable.s6);
-                        break;
-                    case 6:
-                        i.setBackgroundResource(R.drawable.s7);
-                        break;
-                    case 7:
-                        i.setBackgroundResource(R.drawable.s8);
-                        break;
-                    case 8:
-                        i.setBackgroundResource(R.drawable.s9);
-                        break;
-                    case 9:
-                        i.setBackgroundResource(R.drawable.s10);
-                        break;
-                    case 10:
-                        i.setBackgroundResource(R.drawable.s11);
-                        break;
-                    case 11:
-                        i.setBackgroundResource(R.drawable.s12);
-                        break;
-                    case 12:
-                        i.setBackgroundResource(R.drawable.s13);
-                        break;
-                }
-                break;
-            case 3:
+            case 1:
                 switch(x) {
                     case 0:
                         i.setBackgroundResource(R.drawable.d1);
@@ -519,6 +441,93 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 break;
+            case 2:
+                switch(x) {
+                    case 0:
+                        i.setBackgroundResource(R.drawable.c1);
+                        break;
+                    case 1:
+                        i.setBackgroundResource(R.drawable.c2);
+                        break;
+                    case 2:
+                        i.setBackgroundResource(R.drawable.c3);
+                        break;
+                    case 3:
+                        i.setBackgroundResource(R.drawable.c4);
+                        break;
+                    case 4:
+                        i.setBackgroundResource(R.drawable.c5);
+                        break;
+                    case 5:
+                        i.setBackgroundResource(R.drawable.c6);
+                        break;
+                    case 6:
+                        i.setBackgroundResource(R.drawable.c7);
+                        break;
+                    case 7:
+                        i.setBackgroundResource(R.drawable.c8);
+                        break;
+                    case 8:
+                        i.setBackgroundResource(R.drawable.c9);
+                        break;
+                    case 9:
+                        i.setBackgroundResource(R.drawable.c10);
+                        break;
+                    case 10:
+                        i.setBackgroundResource(R.drawable.c11);
+                        break;
+                    case 11:
+                        i.setBackgroundResource(R.drawable.c12);
+                        break;
+                    case 12:
+                        i.setBackgroundResource(R.drawable.c13);
+                        break;
+                }
+                break;
+            case 3:
+                switch(x) {
+                    case 0:
+                        i.setBackgroundResource(R.drawable.s1);
+                        break;
+                    case 1:
+                        i.setBackgroundResource(R.drawable.s2);
+                        break;
+                    case 2:
+                        i.setBackgroundResource(R.drawable.s3);
+                        break;
+                    case 3:
+                        i.setBackgroundResource(R.drawable.s4);
+                        break;
+                    case 4:
+                        i.setBackgroundResource(R.drawable.s5);
+                        break;
+                    case 5:
+                        i.setBackgroundResource(R.drawable.s6);
+                        break;
+                    case 6:
+                        i.setBackgroundResource(R.drawable.s7);
+                        break;
+                    case 7:
+                        i.setBackgroundResource(R.drawable.s8);
+                        break;
+                    case 8:
+                        i.setBackgroundResource(R.drawable.s9);
+                        break;
+                    case 9:
+                        i.setBackgroundResource(R.drawable.s10);
+                        break;
+                    case 10:
+                        i.setBackgroundResource(R.drawable.s11);
+                        break;
+                    case 11:
+                        i.setBackgroundResource(R.drawable.s12);
+                        break;
+                    case 12:
+                        i.setBackgroundResource(R.drawable.s13);
+                        break;
+                }
+                break;
         }
     }
+
 }
