@@ -37,8 +37,6 @@ public class GameType {
 	 *            Name of game
 	 * @param playerNum
 	 *            Number of Players
-	 * @throws Exception
-	 *             Bad game type Exception
 	 */
 	public GameType(final String gameName, final int playerNum) {
 		this.type = gameName;
