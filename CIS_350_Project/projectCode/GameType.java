@@ -22,10 +22,6 @@ public class GameType {
 	 */
 	int playerNum;
 	/**
-	 * Size of hand to be dealt.
-	 */
-	int handSize;
-	/**
 	 * Lowest value of deck.
 	 */
 	int deckMin;
@@ -33,10 +29,6 @@ public class GameType {
 	 * Highest value of deck.
 	 */
 	int deckMax;
-	/**
-	 * Number of cards in deck.
-	 */
-	int deckSize;
 
 	/**
 	 * GameType Constructor.
@@ -48,8 +40,7 @@ public class GameType {
 	 * @throws Exception
 	 *             Bad game type Exception
 	 */
-	public GameType(final String gameName, final int playerNum) 
-			throws Exception {
+	public GameType(final String gameName, final int playerNum) {
 		this.type = gameName;
 		this.playerNum = playerNum;
 		s = new Scanner(System.in);
@@ -62,56 +53,22 @@ public class GameType {
 	 * @throws Exception
 	 *             Bad game type Exception
 	 */
-	private void gameInit() throws Exception {
+	private void gameInit() {
 		switch (type) {
 		case "GOFISH":
 			this.deckMin = 2;
 			this.deckMax = 14;
 			break;
-		case "EUCHRE":
-			this.deckMin = 9;
+		case "WAR":
+			this.deckMin = 2;
 			this.deckMax = 14;
 			break;
 		default:
-			throw new Exception("Not valid game type");
+			//meh
 		}
 	}
 
 	// TODO different game-mode logic
-
-	/**
-	 * Checks the given players hand to determine if they have a set 
-	 * of 4 in therehand. It then removes those cards and puts them 
-	 * in the players discard pile and gives them a point.
-	 * 
-	 * @param p
-	 *            The player who's hand is being checked
-	 * @param g
-	 *            The game variable for the deck
-	 */
-	public void score(final Player p, final Game g) {
-		ArrayList<Integer> a;
-		a = new ArrayList<Integer>();
-		for (int i = 0; i < p.hand.size(); i++) {
-			a.add(i);
-			for (int k = i + 1; k < p.hand.size(); k++) {
-				if (p.hand.get(i).face == p.hand.get(k).face) {
-					a.add(k);
-				}
-			}
-			if (a.size() == 4) {
-				i = 0;
-				// cardsLost += 4;
-				p.score++;
-				for (int j = 0; j < 4; j++) {
-					p.discard.add(p.hand.get(j));
-				}
-				for (int j = 0; j < 4; j++) {
-					p.hand.remove(a.get(p.hand.size() - j));
-				}
-			}
-		}
-	}
 
 	/**
 	 * Checks for a winner at the end of the game by comparing scores.
@@ -120,21 +77,75 @@ public class GameType {
 	 *            The ArrayList of players to check
 	 * @return Returns the winning player
 	 */
-	public Player declareWinner(final ArrayList<Player> players) {
-		int[] a;
-		a = new int[this.playerNum];
+	public int declareWinnerGoFish(final ArrayList<Player> players) {
+		if (players.get(0).score > players.get(1).score) {
+			System.out.println(players.get(0).name 
+					+ " WINS!!" + players.get(0).score 
+					+ " - " + players.get(1).score);
+			return 0;
+		} else if (players.get(0).score < players.get(1).score) {
+			System.out.println(players.get(1).name 
+					+ " WINS!!" + players.get(1).score 
+					+ " - " + players.get(0).score);
+			return 1;
+		} else {
+			System.out.println("TIE, no body wins!!");
+			return 2;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param w
+	 * 		The current win number;
+	 * @return
+	 * 		Returns who won.
+	 */
+	public int declareWinnerWar(final int w) {
+		switch (w) {
+		case 42:
+			System.out.println("Player Wins!");
+			return 0;
+		case 13:
+			System.out.println("Computer Wins!");
+			return 1;
+		default:
+			return 2; //how?
+		}
+	}
+	
+
+	/**
+	 * Increments the score in goFish game if the player has
+	 * the correct amount of cards in their hand.
+	 * @param p
+	 * 		The player who's hand is being checked
+	 */
+	public void goFishScore(final Player p) {
 		int count = 0;
-		for (Player y : players) {
-			a[count++] = y.score;
-		}
-		int maxAt = 0;
-
-		for (int i = 0; i < a.length; i++) {
-			if (a[i] > a[maxAt]) {
-				maxAt = i;
+		for (int i = 0; i < p.hand.size() - 1; i++) {
+			for (int j = i + 1; j < p.hand.size(); j++) {
+				if (p.hand.get(i).compareTo(p.hand.get(j)) == 0) {
+					count++;
+				}
 			}
+			if (count == 3) {
+				Card ref;
+				ref = p.hand.get(i);
+				for (int x = 0; x < p.hand.size(); x++) {
+					if (ref.compareTo(p.hand.get(x)) == 0) {
+						p.discard.add(p.hand.get(x));
+						p.hand.remove(x);
+						x--;
+					}
+				}
+				p.score++;
+				System.out.println(p.name 
+						+ " has Scored!!" 
+						+ " Their Score is now " 
+						+ p.score);
+			}
+			count = 0;
 		}
-
-		return players.get(maxAt);
 	}
 }

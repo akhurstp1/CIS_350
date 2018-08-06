@@ -34,10 +34,10 @@
         android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:onClick="playerTypePressed"
-        app:layout_constraintBottom_toBottomOf="@+id/singlePlayer"
-        app:layout_constraintEnd_toEndOf="@+id/singlePlayer"
-        app:layout_constraintStart_toStartOf="@+id/singlePlayer"
-        app:layout_constraintTop_toTopOf="@+id/singlePlayer" />
+        app:layout_constraintBottom_toBottomOf="@+id/comingSoon"
+        app:layout_constraintEnd_toEndOf="@+id/comingSoon"
+        app:layout_constraintStart_toStartOf="@+id/comingSoon"
+        app:layout_constraintTop_toTopOf="@+id/comingSoon" />
 
     <Button
         android:id="@+id/backButton"
@@ -64,7 +64,7 @@
         app:srcCompat="@drawable/multiplayer" />
 
     <ImageView
-        android:id="@+id/singlePlayer"
+        android:id="@+id/comingSoon"
         android:layout_width="300dp"
         android:layout_height="0dp"
         android:layout_marginEnd="334dp"

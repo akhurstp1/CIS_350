@@ -1,5 +1,6 @@
 package edu.gvsu.boxofcards;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -62,48 +63,16 @@ public class GameType {
 			this.deckMin = 2;
 			this.deckMax = 14;
 			break;
-		case "EUCHRE":
-			this.deckMin = 9;
+		case "MEMORY":
+			this.deckMin = 7;
+			this.deckMax = 14;
+			break;
+		case "WAR":
+			this.deckMin = 2;
 			this.deckMax = 14;
 			break;
 		default:
 			//meh
-		}
-	}
-
-	// TODO different game-mode logic
-
-	/**
-	 * Checks the given players hand to determine if they have a set 
-	 * of 4 in therehand. It then removes those cards and puts them 
-	 * in the players discard pile and gives them a point.
-	 * 
-	 * @param p
-	 *            The player who's hand is being checked
-	 * @param g
-	 *            The game variable for the deck
-	 */
-	public void score(final Player p, final Game g) {
-		ArrayList<Integer> a;
-		a = new ArrayList<Integer>();
-		for (int i = 0; i < p.hand.size(); i++) {
-			a.add(i);
-			for (int k = i + 1; k < p.hand.size(); k++) {
-				if (p.hand.get(i).face == p.hand.get(k).face) {
-					a.add(k);
-				}
-			}
-			if (a.size() == 4) {
-				i = 0;
-				// cardsLost += 4;
-				p.score++;
-				for (int j = 0; j < 4; j++) {
-					p.discard.add(p.hand.get(j));
-				}
-				for (int j = 0; j < 4; j++) {
-					p.hand.remove(a.get(p.hand.size() - j));
-				}
-			}
 		}
 	}
 
@@ -131,4 +100,60 @@ public class GameType {
 
 		return players.get(maxAt);
 	}
+
+		
+	/**
+	 * 
+	 * @param w
+	 * @return
+	 */
+	public int declareWinnerWar(int w){
+		switch(w){
+		case 42:
+			System.out.println("Player Wins!");
+			return 0;
+		case 13:
+			System.out.println("Computer Wins!");
+			return 1;
+		default:
+			return 2;//how?
+		}
+	}
+
+    /**
+     * Increments the score for player in goFish
+     *
+     * @param p
+     */
+    public ArrayList<Card> goFishScore(Player p){
+		ArrayList<Card> c = new ArrayList<>();
+
+        int count = 0;
+        for(int i = 0; i < p.hand.size()-1; i++){
+            for(int j = i+1; j < p.hand.size(); j++){
+                if(p.hand.get(i).compareTo(p.hand.get(j)) == 0){
+                    count++;
+                }
+            }
+            if(count > 0){
+                Card ref;
+                ref = p.hand.get(i);
+                count = 0;
+                for(int x = 0; x < p.hand.size(); x++){
+                    if(ref.compareTo(p.hand.get(x)) == 0){
+						if(count > 2) break;
+						count++;
+                    	c.add(p.hand.get(x));
+                        p.discard.add(p.hand.get(x));
+                        p.hand.remove(x);
+                        x--;
+                    }
+                }
+				p.score++;
+            }
+            count = 0;
+        }
+
+        return c;
+    }
 }

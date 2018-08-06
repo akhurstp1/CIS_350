@@ -1,7 +1,1 @@
-/Card.class
-/Game.class
-/GameType.class
-/Main.class
-/Player.class
-/package-info.class
-/Tests.class
+*.class

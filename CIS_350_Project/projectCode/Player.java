@@ -42,6 +42,7 @@ public class Player {
 	public void sortHand() {
 		Collections.sort(hand);
 	}
+	
 
 	/**
 	 * Prints player's hand.
